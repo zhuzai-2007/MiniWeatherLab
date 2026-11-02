@@ -1,0 +1,12 @@
+{
+  "a": {
+    "max_abs_error": 2.6226043701171875e-06,
+    "unit": "K",
+    "passed": true
+  },
+  "b": {
+    "max_abs_error": 4.76837158203125e-06,
+    "unit": "K",
+    "passed": true
+  }
+}

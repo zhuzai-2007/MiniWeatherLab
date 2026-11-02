@@ -1,0 +1,9 @@
+{
+  "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+  "torch": "2.11.0+cu128",
+  "cuda": "12.8",
+  "config": {"train_initial_fields":512,"validation_initial_fields":64,"batch_initial_fields":32,"steps":10,"width":32},
+  "seconds_including_cuda_initialization_and_validation":24.4,
+  "validation_mse_k2": {"a":0.6551,"b":0.6418},
+  "note":"Short pre-training benchmark; separate from the final 18-epoch run."
+}
