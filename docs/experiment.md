@@ -26,3 +26,5 @@ python src/train.py --train 1024 --val 128 --test 128 --epochs 18 --batch 32 --w
 浮点运算、PyTorch/CUDA 版本和硬件差异可能导致结果不完全相同。`python src/check_onnx.py` 比较最终 PyTorch 权重与 ONNX 输出，并会重写 `results/metrics/onnx_parity.json`。`python src/visualize.py` 根据保存的日志与回放生成图表；中文字体的显示取决于本地环境。
 
 `results/checkpoints/*_final.pt` 是最终 PyTorch 权重；训练中间权重默认保留在本地、不纳入公开清单。网页实际使用 `web/models/`、`web/data/` 和 `web/vendor/` 中的文件，回放数据包含各保存阶段的预测，不需要中间权重即可播放。图表由项目代码和实验数据生成；网页截图来自本项目界面。
+
+轻量版和离线版内嵌三个固定样本：一个来自验证集回放，另两个为不同幅度、位置和宽度的合成场。`scripts/lite/generate.cjs` 用已有 ONNX 模型计算 A 和两个方向的 B，不进行训练；输入及输出按 0.001 K 量化保存，单次数值量化误差至多 0.0005 K。回放中的初始场原本已保留四位小数，因此重新推理的默认样本与原 checkpoint 快照可能有微小数值差异。测试集指标未量化或重新计算。运行 `node scripts/lite/generate.cjs` 可重新生成固定数据，再运行 `python scripts/build_lite.py` 构建两个页面；仅构建页面不需要模型推理或网络。

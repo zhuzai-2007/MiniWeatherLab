@@ -8,7 +8,13 @@ MiniWeatherLab 是为《大气科学基础》课程制作的一个小型机器�
 
 ## 在线体验
 
-**Live Demo：尚未发布。** 预计地址为 `https://zhuzai-2007.github.io/MiniWeatherLab/`；部署成功并验证后将在此添加链接。
+**现有在线演示：** [MiniWeatherLab](https://zhuzai-2007.github.io/MiniWeatherLab/)
+
+本次更新在本地准备了三个版本；新入口需要推送并部署后才能在线使用：
+
+- **轻量版** `web/lite.html`：固定样本的真实预计算预测与训练回放，无需加载模型。
+- **完整版** `web/full.html`：按需加载 ONNX 模型，支持调整初始条件并实时预测；现有首页保留同样的完整版功能。
+- **离线演示版** `web/standalone.html`：单个自包含 HTML，可直接打开，无需网络或服务器。
 
 ![MiniWeatherLab 实验演示界面](docs/demo.jpg)
 
@@ -36,7 +42,7 @@ A 的整体误差接近理论最优，但低温峰值明显变弱。B 与 A 使�
 
 ## 如何使用？
 
-发布后打开 Live Demo 即可。**实验演示**中可以切换未来方向、叠加图层并查看温度剖面；**原理**介绍实验与卷积；**训练过程**展示真实训练日志和保存的预测快照。
+**实验演示**中可以切换未来方向、叠加图层并查看温度剖面；**原理**介绍实验与卷积；**训练过程**展示真实训练日志和保存的预测快照。轻量版与离线版使用固定样本，不能对任意新参数实时推理。
 
 本地查看时，在项目根目录运行：
 
@@ -44,7 +50,7 @@ A 的整体误差接近理论最优，但低温峰值明显变弱。B 与 A 使�
 node web/serve.mjs
 ```
 
-然后访问 `http://localhost:8000`。也可运行 `python -m http.server 8000 --directory web`。请通过本地 HTTP 服务打开网页；A、B 模型在浏览器内推理，不需要在线 API。
+然后访问 `http://localhost:8000`。也可运行 `python -m http.server 8000 --directory web`。完整版需通过 HTTP 服务打开，并手动加载模型；轻量版同样可通过服务访问。离线版可直接打开 `web/standalone.html`。使用已有预计算数据重新生成两个自包含页面：`python scripts/build_lite.py`。
 
 ## 实现与复现
 

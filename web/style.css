@@ -37,3 +37,12 @@
 @media(min-width:1024px) and (max-height:800px){.finding>.section-title{border:0;padding:0;margin:0}.sidebar{gap:6px}.comparison .metric-row{margin-top:3px;padding-top:3px}.direction-card .hint{margin-top:2px}.parameters{margin-top:4px;padding-top:3px}.layer-group>p{font-size:11px}}
 @media(min-width:1024px){.training-topline>span{display:none}}
 .training-topline .training-index{display:none}
+
+/* Version choices and the independently loaded real-time inference layer. */
+.version-link{color:#426c61;font-size:12px;text-decoration:none;white-space:nowrap}
+.version-link:hover{text-decoration:underline}
+.model-status{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.model-status .text-button{white-space:nowrap}
+.primary-choice{display:flex;gap:8px;align-items:center;font-size:12px;color:#64706f;margin-top:7px}
+.primary-choice select{font:inherit;color:#426c61;background:white;border:1px solid #dce4de;border-radius:5px;padding:3px 6px}
+@media(max-width:650px){.top-actions{gap:8px}.version-link{font-size:11px}.model-status{justify-content:flex-end}.status{white-space:normal;text-align:right}}

@@ -34,11 +34,8 @@
       for(let j=0;j<size;j++)for(let i=0;i<size;i++){
         const v=field[viewY+j][viewX+i];
         // One shared field-of-view and fixed color scale across all snapshots.
-        const magnitude=Math.max(0,Math.min(1,-v/14));
-        // A fixed nonlinear color mapping emphasizes the cold core and gently fades weak anomalies.
-        const q=Math.pow(magnitude,0.72), t=q*q*(3-2*q);
-        const base=[249,250,248], end=[23,64,111];
-        const p=(j*size+i)*4; for(let k=0;k<3;k++)im.data[p+k]=Math.round(base[k]+(end[k]-base[k])*t); im.data[p+3]=255;
+        const rgb=window.temperatureColor(v);
+        const p=(j*size+i)*4; for(let k=0;k<3;k++)im.data[p+k]=rgb[k]; im.data[p+3]=255;
       }
       c.putImageData(im,0,0);const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(off,0,0,canvas.width,canvas.height);
       return min;
@@ -46,7 +43,7 @@
     function render() {
       slider.value=epoch.toFixed(2);q('.training-epoch').textContent=`Epoch ${Number(epoch.toFixed(1))}`;chart();
       const stage=replay.stages.reduce((best,s)=>Math.abs(s.epoch-epoch)<Math.abs(best.epoch-epoch)?s:best,replay.stages[0]);
-      q('.training-checkpoint').textContent=`真实快照：Epoch ${stage.epoch}（最近保存）`;
+      q('.training-checkpoint').textContent=`训练记录已加载 · 真实快照：Epoch ${stage.epoch}（最近保存）`;
       if(stage.epoch!==lastSnapshot){lastSnapshot=stage.epoch;const mA=heat(q('.training-a'),stage.a),mB=heat(q('.training-b'),stage.b_left);q('.training-a-min').textContent=`全场最低 ${mA.toFixed(2)} K`;q('.training-b-min').textContent=`全场最低 ${mB.toFixed(2)} K`;}
     }
     function stop(){playing=false;cancelAnimationFrame(animation);button.textContent=epoch>=18?'↻ 重播训练过程':'▶ 继续播放';}
@@ -54,7 +51,7 @@
     button.onclick=()=>{if(!replay)return;if(playing){stop();return;}if(epoch>=18)epoch=0;playing=true;last=performance.now();button.textContent='Ⅱ 暂停';animation=requestAnimationFrame(tick);};
     slider.oninput=()=>{if(!replay)return;if(playing)stop();epoch=Number(slider.value);render();};
     Promise.all(['data/replay.json','data/a.json','data/b.json'].map(url=>fetch(url).then(r=>{if(!r.ok)throw new Error(`${url}: HTTP ${r.status}`);return r.json();}))).then(data=>{
-      [replay,aLog,bLog]=data;let peak=Infinity,px=0,py=0;replay.initial.forEach((row,y)=>row.forEach((v,x)=>{if(v<peak){peak=v;px=x;py=y;}}));viewX=Math.max(0,Math.min(replay.size-64,px-32));viewY=Math.max(0,Math.min(replay.size-64,py-32));const m=heat(q('.training-truth'),replay.left);q('.training-truth-min').textContent=`全场最低 ${m.toFixed(2)} K`;render();
+      [replay,aLog,bLog]=data;let peak=Infinity,px=0,py=0;replay.initial.forEach((row,y)=>row.forEach((v,x)=>{if(v<peak){peak=v;px=x;py=y;}}));viewX=Math.max(0,Math.min(replay.size-64,px-32));viewY=Math.max(0,Math.min(replay.size-64,py-32));const m=heat(q('.training-truth'),replay.left);q('.training-truth-min').textContent=`全场最低 ${m.toFixed(2)} K`;q('.training-checkpoint').textContent='训练记录已加载';render();
     }).catch(err=>{console.error(err);q('.training-error').hidden=false;q('.training-error').textContent='训练记录加载失败，请通过本地 HTTP 服务器打开并检查 web/data。';q('.training-checkpoint').textContent='训练数据不可用';button.disabled=true;slider.disabled=true;});
   };
 })();
